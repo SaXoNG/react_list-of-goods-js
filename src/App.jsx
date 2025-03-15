@@ -20,16 +20,16 @@ export const goodsFromServer = [
 const SORT_BY_ALPHABET = 'alph';
 const SORT_BY_LENGTH = 'len';
 
-function getPrepareGoods(goods, sorfField) {
+function prepareGoods(goods, sortField) {
   const preparedGoods = [...goods];
 
-  if (sorfField) {
+  if (sortField) {
     preparedGoods.sort((good1, good2) => {
-      if (sorfField === SORT_BY_ALPHABET) {
+      if (sortField === SORT_BY_ALPHABET) {
         return good1.localeCompare(good2);
       }
 
-      if (sorfField === SORT_BY_LENGTH) {
+      if (sortField === SORT_BY_LENGTH) {
         return good1.length - good2.length;
       }
 
@@ -41,9 +41,10 @@ function getPrepareGoods(goods, sorfField) {
 }
 
 export const App = () => {
+  const copyOfOriginGoods = [...goodsFromServer];
   const [isReversed, setIsReversed] = useState(false);
   const [sortField, setSortField] = useState('');
-  const visibleGoods = getPrepareGoods(goodsFromServer, sortField);
+  const visibleGoods = prepareGoods(copyOfOriginGoods, sortField);
 
   if (isReversed) {
     visibleGoods.reverse();
@@ -95,13 +96,11 @@ export const App = () => {
       </div>
 
       <ul>
-        {visibleGoods.map(goodName => {
-          return (
-            <li data-cy="Good" key={goodName}>
-              {goodName}
-            </li>
-          );
-        })}
+        {visibleGoods.map(goodName => (
+          <li data-cy="Good" key={goodName}>
+            {goodName}
+          </li>
+        ))}
       </ul>
     </div>
   );
